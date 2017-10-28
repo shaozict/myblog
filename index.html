@@ -48,9 +48,9 @@
       </nav>
       <nav id="sub-nav">
         
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
@@ -71,18 +71,49 @@
   <div class="article-inner">
     
     
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/28/20171028/">常见编码名词的含义与作用：base64、url编码、unicode、UTF-8、ASCII</a>
+    </h1>
+  
+
+      </header>
+    
     <div class="article-entry" itemprop="articleBody">
       
-        <ol>
-<li>ASCLL与Unicode的前世今生 - 将自然语言编码成16进制的手段<br>计算机发明后，为了在计算机中表示字符，人们制定了一种编码，叫ASCII码。ASCII码由一个字节中的7位(bit)表示，范围是0x00 - 0x7F 共128个字符。<br>后来他们突然发现，如果需要按照表格方式打印这些字符的时候，缺少了“制表符”。于是又扩展了ASCII的定义，使用一个字节的全部8位(bit)来表示字符了，这就叫扩展ASCII码。范围是0x00 - 0xFF 共256个字符。<br>中国人利用连续2个扩展ASCII码的扩展区域（0xA0以后）来表示一个汉字，该方法的标准叫GB-2312。后来，日文、韩文、阿拉伯文、台湾繁体（BIG-5）……都使用类似的方法扩展了本地字符集的定义，现在统一称为MBCS字符集（多字节字符集）。这个方法是有缺陷的，因为各个国家地区定义的字符集有交集，因此使用GB-2312的软件，就不能在BIG-5的环境下运行（显示乱码），反之亦然。<br>为了把全世界人民所有的所有的文字符号都统一进行编码，于是制定了UNICODE标准字符集。UNICODE使用2个字节表示一个字符(unsigned shor int、WCHAR、_wchar_t、OLECHAR)。这下终于好啦，全世界任何一个地区的软件，可以不用修改地就能在另一个地区运行了。虽然我用 IE 浏览日本网站，显示出我不认识的日文文字，但至少不会是乱码了。UNICODE的范围是0x0000-0xFFFF共6万多个字符，其中光汉字就占用了4万多个<br>事实证明，对可以用ASCII表示的字符使用UNICODE并不高效，因为UNICODE比ASCII占用大一倍的空间，而对ASCII来说高字节的0对他毫无用处。为了解决这个问题，就出现了一些中间格式的字符集，他们被称为通用转换格式，即UTF（Unicode Transformation Format）。常见的UTF格式有：UTF-7, UTF-7.5, UTF-8,UTF-16, 以及 UTF-32。<br>关键词： ASCLL 制表符 扩展ASCLL码 GB-2312 MBCS Unicode UTF-8<br>所以：<br>unicode、ascll都是一种字符集以及对应编码方式的称谓。就是按照哪种方式将自然语言编码，然后形成的对应编码集。<br>GB-2312 是汉字的一种产生于ascll的编码方式<br>unicode是对ascll的一种替换，解决了各国编码不统一，不能跨语言的问题，所以被称为万国码<br>UTF-8是通用转换格式字符集，是为了解决UNICODE比ASCII占用大一倍的空间的问题</li>
-<li>base64 - 将所有字符（特殊字符）映射成64个常见安全字符<br>bsae64编码是将所有字符映射成64个常见安全字符。解决再http传输协议对特殊字符的限制。eg：http分析程序的冒号、换行符或二进制。<br>原理：将8位字节序列，每三个24位序列分配成每个6位的片段,每个片段转成安全的64（2^6）个字符之一表示。筹不够24位（6、8的最小公倍数）的，在序列末尾补0。6个0用第65个符号“=”表示。这样就不用担心不安全了。base64是作为MIME多媒体电子邮件标准的一部分开发，就是用来传输的。<br>base64是根据字符的二进制表示，映射到安全字符的，所以二进制文件都可以通过base64编码转换，包括图片。<br>使用：通过http网络传输的数据，都要经过base64转码，保证字符是安全格式。</li>
-<li>url编码 - 将所有字符（特殊字符）映射成URL接受的字符<br>参考链接：【关于URL编码】<br>使用：<br>URL只能使用英文字母、阿拉伯数字和某些标点符号表示，特殊字符需要编码后使用<br>浏览器会自动完成”URL编码”，但不同浏览器编码方式不统一，会混乱，无法保证服务端接收到同意的编码结果<br>所以对于带特殊字符的url，使用Javascript先对URL编码，然后再向服务器提交，不要给浏览器插手的机会，保证服务器得到的数据是格式统一<br>encodeURI()是Javascript中用来对URL编码的函数；decodeURI()是对应的解码形式；以及encodeURIComponent、decodeURIComponent<br>encodeURL(‘<a href="http://tool.chinaz.com/Tools/urlencode.aspx" target="_blank" rel="external">http://tool.chinaz.com/Tools/urlencode.aspx</a>‘) =&gt;<br>“<a href="http://tool.chinaz.com/Tools/urlencode.aspx" target="_blank" rel="external">http://tool.chinaz.com/Tools/urlencode.aspx</a>“ //不对某些符号编码<br>encodeURIComponent(‘<a href="http://tool.chinaz.com/Tools/urlencode.aspx" target="_blank" rel="external">http://tool.chinaz.com/Tools/urlencode.aspx</a>‘) =&gt;<br>“http%3A%2F%2Ftool.chinaz.com%2FTools%2Furlencode.aspx”</li>
+        <h3 id="1-ASCLL与Unicode的前世今生-将自然语言编码成16进制的手段"><a href="#1-ASCLL与Unicode的前世今生-将自然语言编码成16进制的手段" class="headerlink" title="1. ASCLL与Unicode的前世今生 - 将自然语言编码成16进制的手段"></a>1. ASCLL与Unicode的前世今生 - 将自然语言编码成16进制的手段</h3><ul>
+<li>计算机发明后，为了在计算机中表示字符，人们制定了一种编码，叫ASCII码。ASCII码由一个字节中的7位(bit)表示，范围是0x00 - 0x7F 共128个字符。</li>
+<li>后来他们突然发现，如果需要按照表格方式打印这些字符的时候，缺少了“制表符”。于是又扩展了ASCII的定义，使用一个字节的全部8位(bit)来表示字符了，这就叫扩展ASCII码。范围是0x00 - 0xFF 共256个字符。</li>
+<li>中国人利用连续2个扩展ASCII码的扩展区域（0xA0以后）来表示一个汉字，该方法的标准叫GB-2312。后来，日文、韩文、阿拉伯文、台湾繁体（BIG-5）……都使用类似的方法扩展了本地字符集的定义，现在统一称为MBCS字符集（多字节字符集）。这个方法是有缺陷的，因为各个国家地区定义的字符集有交集，因此使用GB-2312的软件，就不能在BIG-5的环境下运行（显示乱码），反之亦然。</li>
+<li>为了把全世界人民所有的所有的文字符号都统一进行编码，于是制定了UNICODE标准字符集。UNICODE使用2个字节表示一个字符(unsigned shor int、WCHAR、_wchar_t、OLECHAR)。这下终于好啦，全世界任何一个地区的软件，可以不用修改地就能在另一个地区运行了。虽然我用 IE 浏览日本网站，显示出我不认识的日文文字，但至少不会是乱码了。UNICODE的范围是0x0000-0xFFFF共6万多个字符，其中光汉字就占用了4万多个</li>
+<li>事实证明，对可以用ASCII表示的字符使用UNICODE并不高效，因为UNICODE比ASCII占用大一倍的空间，而对ASCII来说高字节的0对他毫无用处。为了解决这个问题，就出现了一些中间格式的字符集，他们被称为通用转换格式，即UTF（Unicode Transformation Format）。常见的UTF格式有：UTF-7, UTF-7.5, UTF-8,UTF-16, 以及 UTF-32。<br><strong>关键词： ASCLL 制表符 扩展ASCLL码 GB-2312 MBCS Unicode UTF-8</strong><br>所以：</li>
+</ul>
+<ol>
+<li>unicode、ascll都是一种字符集以及对应编码方式的称谓。就是按照哪种方式将自然语言编码，然后形成的对应编码集。</li>
+<li>GB-2312 是汉字的一种产生于ascll的编码方式</li>
+<li>unicode是对ascll的一种替换，解决了各国编码不统一，不能跨语言的问题，所以被称为万国码</li>
+<li>UTF-8是通用转换格式字符集，是为了解决UNICODE比ASCII占用大一倍的空间的问题<h3 id="2-base64-将所有字符（特殊字符）映射成64个常见安全字符"><a href="#2-base64-将所有字符（特殊字符）映射成64个常见安全字符" class="headerlink" title="2. base64 - 将所有字符（特殊字符）映射成64个常见安全字符"></a>2. base64 - 将所有字符（特殊字符）映射成64个常见安全字符</h3></li>
 </ol>
+<ul>
+<li>bsae64编码是将所有字符映射成64个常见安全字符。解决再http传输协议对特殊字符的限制。eg：http分析程序的冒号、换行符或二进制。</li>
+<li>原理：将8位字节序列，每三个24位序列分配成每个6位的片段,每个片段转成安全的64（2^6）个字符之一表示。筹不够24位（6、8的最小公倍数）的，在序列末尾补0。6个0用第65个符号“=”表示。这样就不用担心不安全了。base64是作为MIME多媒体电子邮件标准的一部分开发，就是用来传输的。</li>
+<li>base64是根据字符的二进制表示，映射到安全字符的，所以二进制文件都可以通过base64编码转换，包括图片。</li>
+<li>使用：通过http网络传输的数据，都要经过base64转码，保证字符是安全格式。<h3 id="3-url编码-将所有字符（特殊字符）映射成URL接受的字符"><a href="#3-url编码-将所有字符（特殊字符）映射成URL接受的字符" class="headerlink" title="3. url编码 - 将所有字符（特殊字符）映射成URL接受的字符"></a>3. url编码 - 将所有字符（特殊字符）映射成URL接受的字符</h3>参考链接：【关于URL编码】<br>使用：</li>
+</ul>
+<ol>
+<li>URL只能使用英文字母、阿拉伯数字和某些标点符号表示，特殊字符需要编码后使用</li>
+<li>浏览器会自动完成”URL编码”，但不同浏览器编码方式不统一，会混乱，无法保证服务端接收到同意的编码结果</li>
+<li>所以对于带特殊字符的url，使用Javascript先对URL编码，然后再向服务器提交，不要给浏览器插手的机会，保证服务器得到的数据是格式统一</li>
+<li>encodeURI()是Javascript中用来对URL编码的函数；decodeURI()是对应的解码形式；以及encodeURIComponent、decodeURIComponent</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">encodeURL(<span class="string">'http://tool.chinaz.com/Tools/urlencode.aspx'</span>) =&gt; </div><div class="line"><span class="string">"http://tool.chinaz.com/Tools/urlencode.aspx"</span> //不对某些符号编码 </div><div class="line">encodeURIComponent(<span class="string">'http://tool.chinaz.com/Tools/urlencode.aspx'</span>) =&gt;</div><div class="line"><span class="string">"http%3A%2F%2Ftool.chinaz.com%2FTools%2Furlencode.aspx"</span></div></pre></td></tr></table></figure>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/10/28/20171028/" data-id="cj9bdvpqr0000u4v4syoap2ua" class="article-share-link">Partager</a>
+      <a data-url="http://yoursite.com/2017/10/28/20171028/" data-id="cj9bdvpqr0000u4v4syoap2ua" class="article-share-link">Share</a>
       
       
     </footer>
@@ -127,7 +158,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/10/28/hello-world/" data-id="cj9bdr6dy0000uwv4nkir0u5j" class="article-share-link">Partager</a>
+      <a data-url="http://yoursite.com/2017/10/28/hello-world/" data-id="cj9bdr6dy0000uwv4nkir0u5j" class="article-share-link">Share</a>
       
       
     </footer>
@@ -162,12 +193,12 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Articles récents</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
         
           <li>
-            <a href="/2017/10/28/20171028/">(no title)</a>
+            <a href="/2017/10/28/20171028/">常见编码名词的含义与作用：base64、url编码、unicode、UTF-8、ASCII</a>
           </li>
         
           <li>
@@ -187,7 +218,7 @@
   <div class="outer">
     <div id="footer-info" class="inner">
       &copy; 2017 John Doe<br>
-      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
 </footer>
